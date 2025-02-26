@@ -14,7 +14,7 @@ import lombok.Data;
 @Data
 public class Question implements Serializable{
     
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(type = IdType.AUTO)
     /**
      * id
      */
