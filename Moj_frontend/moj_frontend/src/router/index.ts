@@ -30,6 +30,30 @@ const routes: Array<RouteRecordRaw> = [
     path: '/register',
     name: 'userRegister',
     component: () => import ('../views/UserRegisterView.vue')
+  },
+  
+  {
+    path: '/noAuthView',
+    name: 'noAuthView',
+    component: () => import ('../views/NoAuthView.vue')
+  },
+  
+  {
+    path: '/backend',
+    redirect: '/backend/entry',
+  },
+  {
+    path: '/backend/entry',
+    name: 'backendEntry',
+    component: () => import ('../views/backend/BackEndEntry.vue')
+  },
+  {
+    path: '/backend/center',
+    name: 'backendManage',
+    component: () => import ('../views/backend/BackendManageView.vue'),
+    meta: {
+      'target': 'admin'
+    }
   }
 ]
 

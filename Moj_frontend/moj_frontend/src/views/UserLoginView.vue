@@ -1,6 +1,6 @@
 <template>
     <div>
-        <UserLoginView class="FormStyle" @submit="onUserLogin"  />
+        <UserLoginView class="FormStyle" @submit="onUserLogin" />
     </div>
 </template>
 
@@ -14,27 +14,25 @@ import { UserStore } from '../store/user'
 const router = useRouter();
 const userStore = UserStore();
 
-async function onUserLogin(account : string, password : string) {
+async function onUserLogin(account: string, password: string) {
     console.log("onUserLogin Called");
     const response = await userStore.userLogin({ userAccount: account, userPassword: password });
     console.log(response);
     if (response?.code === 0) {
-        Message.success({content: '登录成功! 欢迎', duration: 500});
-        
-        router.back();   
+        Message.success({ content: '登录成功! 欢迎', duration: 500 });
+
+        router.back();
     } else {
-        Message.error({content: '登录失败! ' + response?.message, duration: 1000});
+        Message.error({ content: '登录失败! ' + response?.message, duration: 1000 });
     }
 }
 </script>
 
 
 <style scoped>
-
 .FormStyle {
-    position: absolute; 
-    top: 8%; 
+    position: absolute;
+    top: 8%;
     left: 30%;
 }
-
 </style>

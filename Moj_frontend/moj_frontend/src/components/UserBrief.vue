@@ -46,6 +46,8 @@ import { useRouter } from 'vue-router'
 const router = useRouter();
 
 const userStore = UserStore();
+console.log(userStore);
+
 
 async function onToLogin() {
     router.push('/login');

@@ -21,17 +21,19 @@ const isLoggedIn = ref(false)
 
 const fetchCurrentUser = async () => {
     try {
-        const res = await UserControllerService.getLoginUserUsingGet()
+        const res = await UserControllerService.getLoginUserUsingGet();
+
         if (res.code === 0) {
             isLoggedIn.value = true;
-            loginUser.value = res.data as LoginUserVO
+            loginUser.value = res.data as LoginUserVO;
+
 
         } else {
             isLoggedIn.value = false;
             loginUser.value = null;
         }
     } catch (error) {
-        clearUserData()
+        clearUserData();
     }
 }
 
@@ -83,17 +85,13 @@ const checkLogin = () => {
     return isLoggedIn.value;
 }
 
-if (!isLoggedIn.value) {
-    fetchCurrentUser()
-}
-
 return {
-    loginUser,
-    isLoggedIn,
-    userLogin,
-    userLogout,
-    fetchCurrentUser,
-    checkLogin,
-    userRegister
+        loginUser,
+        isLoggedIn,
+        userLogin,
+        userLogout,
+        fetchCurrentUser,
+        checkLogin,
+        userRegister
     }
 })

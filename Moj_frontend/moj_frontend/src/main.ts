@@ -6,9 +6,12 @@ import ArcoVue from '@arco-design/web-vue'
 import ArcoIcon from '@arco-design/web-vue/es/icon'
 import { createPinia } from 'pinia'
 
+import '@/Authority'
+
 createApp(App)
     .use(router)
     .use(ArcoVue)
     .use(ArcoIcon)
     .use(createPinia())
 .mount('#app')
+
