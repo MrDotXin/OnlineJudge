@@ -11,7 +11,7 @@ import com.MrDotXin.moj.judge.codesandbox.Impl.ThirdpartCodeSandbox;
 public class CodeSandboxFactory {
     
     public static CodeSandbox newInstance(String type) {
-       switch (type) {
+        switch (type) {
             case "example":
                 return new ExampleCodeSandbox();
             case "remote" :
@@ -20,6 +20,6 @@ public class CodeSandboxFactory {
                 return new ThirdpartCodeSandbox();
             default :
                 return new ExampleCodeSandbox();
-       } 
+        } 
     }
 }

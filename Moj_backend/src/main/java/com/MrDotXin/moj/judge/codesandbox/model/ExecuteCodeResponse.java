@@ -31,9 +31,17 @@ public class ExecuteCodeResponse {
     /**
      * 
      * 执行状态
+     * 0 没问题
+     * 1 有问题
      */
     private Integer status;
     
+    /*
+     * 错误类型
+     * 
+     */
+    private String status_type;
+
     /**
      * 
      * 判题信息
@@ -45,4 +53,5 @@ public class ExecuteCodeResponse {
 
 
     private long memory;
+
 }

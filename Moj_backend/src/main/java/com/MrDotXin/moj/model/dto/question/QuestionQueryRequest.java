@@ -20,6 +20,7 @@ public class QuestionQueryRequest extends PageRequest implements Serializable {
     /**
      * id
      */
+
     private Long id;
 
     /**

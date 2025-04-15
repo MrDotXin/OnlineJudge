@@ -1,7 +1,7 @@
 package com.MrDotXin.moj.model.vo;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -18,6 +18,7 @@ public class QuestionVO implements Serializable {
     /**
      * id
      */
+ 
     private Long id;
 
     /**

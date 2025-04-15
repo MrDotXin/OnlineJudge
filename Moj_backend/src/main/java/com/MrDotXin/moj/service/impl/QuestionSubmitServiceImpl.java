@@ -20,6 +20,7 @@ import com.MrDotXin.moj.model.dto.questionsubmit.QuestionSubmitQueryRequest;
 import com.MrDotXin.moj.model.entity.Question;
 import com.MrDotXin.moj.model.entity.QuestionSubmit;
 import com.MrDotXin.moj.model.entity.User;
+import com.MrDotXin.moj.model.enums.JudgeInfoMessageEnum;
 import com.MrDotXin.moj.model.enums.QuestionSubmitLanguageEnum;
 import com.MrDotXin.moj.model.enums.QuestionSubmitStatusEnum;
 import com.MrDotXin.moj.service.QuestionService;
@@ -71,8 +72,9 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         questionSubmit.setCode(questionSubmitAddRequest.getCode());
         questionSubmit.setLanguage(questionSubmitAddRequest.getLanguage());
         // 设置初始状态
-        questionSubmit.setStatus(QuestionSubmitStatusEnum.WAITING.getValue());
+        questionSubmit.setStatus(JudgeInfoMessageEnum.WAITING.getValue());
         questionSubmit.setJudgeInfo("{}");
+
         Boolean result = this.save(questionSubmit);
         if (!result) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据插入失败");
@@ -97,7 +99,7 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         }
 
         String language = questionSubmitQueryRequest.getLanguage();
-        Integer status = questionSubmitQueryRequest.getStatus();
+        String status = questionSubmitQueryRequest.getStatus();
         Long questionId = questionSubmitQueryRequest.getQuestionId();
         Long userId = questionSubmitQueryRequest.getUserId();
         String sortFiled = questionSubmitQueryRequest.getSortField();
@@ -105,7 +107,7 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
 
         // 如果字段不为空就拼接查询
         queryWrapper.eq(StringUtils.isNotBlank(language), "language", language);
-        queryWrapper.eq(QuestionSubmitStatusEnum.getEnumByValue(status) != null, "status", status);
+        queryWrapper.eq(JudgeInfoMessageEnum.getEnumByValue(status) != null, "status", status);
         queryWrapper.eq(ObjectUtils.isNotEmpty(questionId), "questionId", questionId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
 
@@ -121,7 +123,7 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
     @Override
     public QuestionSubmitVO getQuestionSubmitVO(QuestionSubmit questionSubmit, User loginUser) {
         QuestionSubmitVO questionSubmitVO = QuestionSubmitVO.objToVo(questionSubmit);
-  
+
         if (!loginUser.getId().equals(questionSubmit.getUserId()) && !userService.isAdmin(loginUser)) {
             questionSubmitVO.setCode("仅用户自己以及管理员可查看");
         }

@@ -15,9 +15,8 @@ import org.apache.commons.lang3.ObjectUtils;
 public enum QuestionSubmitLanguageEnum {
 
     JAVA("Java", "Java"),
-
+    JAVA18("Java 1.8", "Java 1.8"),
     CPLUSPLUS("C++", "C++"),
-
     GOLANG("golang", "golang");
 
     private final String text;

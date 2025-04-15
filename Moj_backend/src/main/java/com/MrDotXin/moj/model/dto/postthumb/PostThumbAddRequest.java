@@ -1,6 +1,7 @@
 package com.MrDotXin.moj.model.dto.postthumb;
 
 import java.io.Serializable;
+
 import lombok.Data;
 
 /**

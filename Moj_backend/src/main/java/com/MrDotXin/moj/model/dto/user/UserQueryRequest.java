@@ -1,6 +1,7 @@
 package com.MrDotXin.moj.model.dto.user;
 
 import com.MrDotXin.moj.common.PageRequest;
+
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +18,7 @@ public class UserQueryRequest extends PageRequest implements Serializable {
     /**
      * id
      */
+
     private Long id;
 
     /**

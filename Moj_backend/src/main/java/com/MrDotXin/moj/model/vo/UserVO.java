@@ -2,6 +2,7 @@ package com.MrDotXin.moj.model.vo;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import lombok.Data;
 
 /**
@@ -16,6 +17,7 @@ public class UserVO implements Serializable {
     /**
      * id
      */
+ 
     private Long id;
 
     /**

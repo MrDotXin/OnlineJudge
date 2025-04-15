@@ -110,7 +110,7 @@ import { ref } from 'vue';
 import { MdEditor } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
 
-import { QuestionControllerService, Question, QuestionAddRequest } from '@/backend'
+import { QuestionControllerService, QuestionAddRequest } from '@/backend/question'
 
 import { Message } from '@arco-design/web-vue';
 
@@ -134,7 +134,6 @@ const addTestCase = () => {
 }
 
 const SubmitQuestion = async () => {
-    console.log(FormData.value);
     let question = {
         answer: "",
         content: text.value,
@@ -142,8 +141,8 @@ const SubmitQuestion = async () => {
         tags: FormData.value.tags,
         title: FormData.value.title,
         judgeConfig: {
-            timeLimit: FormData.value.TimeLimit,
-            memoryLimit: FormData.value.MemoryLimit
+            timeLimit: String(FormData.value.TimeLimit),
+            memoryLimit: String(FormData.value.MemoryLimit)
         }
     } as QuestionAddRequest;
 

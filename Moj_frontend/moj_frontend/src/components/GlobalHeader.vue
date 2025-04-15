@@ -7,10 +7,12 @@
             :show-back="false"
             >
                 <template #title>
-                    <a-space align="center">
-                        <img src="@/assets/dog.png" width="20px" height="20px"/>
-                        <span :style="{ marginLeft: '5px' }">MOJ</span>
-                    </a-space>
+                    <router-link to="/" >
+                        <a-space align="center">
+                            <img src="@/assets/dog.png" width="20px" height="20px"/>
+                            <span :style="{ marginLeft: '5px' }">MOJ</span>
+                        </a-space>
+                    </router-link>
                 </template> 
             </a-page-header>
         </div>

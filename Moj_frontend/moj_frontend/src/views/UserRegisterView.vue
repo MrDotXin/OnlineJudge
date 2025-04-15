@@ -15,9 +15,7 @@ const router = useRouter();
 const userStore = UserStore();
 
 async function onUserRegister(account : string, password : string) {
-    console.log("onUserRegister Called");
     const response = await userStore.userRegister({ userAccount: account, userPassword: password, checkPassword: password });
-    console.log(response);
     if (response?.code === 0) {
         Message.success({content: '注册成功!', duration: 500});
         

@@ -1,7 +1,7 @@
 package com.MrDotXin.moj.model.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -18,6 +18,7 @@ public class Question implements Serializable{
     /**
      * id
      */
+ 
     private Long id;
 
     /**

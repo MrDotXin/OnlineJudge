@@ -7,5 +7,5 @@ import com.MrDotXin.moj.judge.codesandbox.model.ExecuteCodeResponse;
 public interface CodeSandbox {
 
     public ExecuteCodeResponse executeCode(ExecuteCodeRequest executeCodeRequest);
-     
+
 }

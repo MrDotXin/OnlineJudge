@@ -1,0 +1,7 @@
+spring: 
+  application: 
+    name: exampleSandbox
+
+
+server:
+  port: 8106

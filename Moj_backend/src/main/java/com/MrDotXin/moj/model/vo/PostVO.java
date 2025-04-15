@@ -2,6 +2,7 @@ package com.MrDotXin.moj.model.vo;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import com.MrDotXin.moj.model.entity.Post;
 import java.io.Serializable;
 import java.util.Date;
@@ -23,6 +24,7 @@ public class PostVO implements Serializable {
     /**
      * id
      */
+ 
     private Long id;
 
     /**

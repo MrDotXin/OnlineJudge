@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { LoginUserVO } from '@/backend'
-import { UserControllerService } from '@/backend'
+import type { LoginUserVO } from '@/backend/user'
+import { UserControllerService } from '@/backend/user'
 
 interface LoginParams {
     userAccount: string

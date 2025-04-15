@@ -1,6 +1,7 @@
 package com.MrDotXin.moj.model.dto.user;
 
 import java.io.Serializable;
+
 import lombok.Data;
 
 /**
@@ -14,6 +15,7 @@ public class UserUpdateRequest implements Serializable {
     /**
      * id
      */
+ 
     private Long id;
 
     /**

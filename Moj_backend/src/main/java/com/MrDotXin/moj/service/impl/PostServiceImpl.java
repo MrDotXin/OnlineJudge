@@ -3,7 +3,6 @@ package com.MrDotXin.moj.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.google.gson.Gson;
 import com.MrDotXin.moj.common.ErrorCode;
 import com.MrDotXin.moj.constant.CommonConstant;
 import com.MrDotXin.moj.exception.BusinessException;
@@ -57,7 +56,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements PostService {
 
-    private final static Gson GSON = new Gson();
+    // private final static Gson GSON = new Gson();
 
     @Resource
     private UserService userService;

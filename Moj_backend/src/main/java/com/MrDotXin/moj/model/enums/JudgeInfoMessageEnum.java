@@ -14,27 +14,29 @@ import org.apache.commons.lang3.ObjectUtils;
  */
 public enum JudgeInfoMessageEnum {
 
-    ACCEPTED("Accepted", "提交通过"),
+    ACCEPTED("提交通过", "Accepted"),
 
-    WRONG_ANSWER("Wrong Answer", "答案错误"),
-
-    COMPILER_ERROR("Compiler Error", "编译错误"),
-
-    MEMORY_LIMIT_EXCCEED("Memory Limit Excceed", "超出内存限制"),
-
-    TIME_LIMIT_EXCCEED("Time Limit Excceed", "超出时间限制"),
-
-    PRESENTATION_ERROR("Presentation Error", "展示错误"),
-
-    OUTPUT_LIMIT_EXCCEED("Output Limit Excceed", "输出溢出"),
-
-    DANGEROUS_OPERATION("Dangerous Operation", "危险操作"),
-
-    RUNTIME_ERROR("Runtime Error", "运行异常"),
-
-    SYSTEM_ERROR("System Error", "系统错误"),
-
-    WAITING("Waitting", "等待中");
+    WRONG_ANSWER("答案错误", "Wrong Answer"),
+    
+    COMPILER_ERROR("编译错误", "Compiler Error"),
+    
+    MEMORY_LIMIT_EXCCEED("超出内存限制", "Memory Limit Excceed"),
+    
+    TIME_LIMIT_EXCCEED("超出时间限制", "Time Limit Excceed"),
+    
+    PRESENTATION_ERROR("展示错误", "Presentation Error"),
+    
+    OUTPUT_LIMIT_EXCCEED("输出溢出", "Output Limit Excceed"),
+    
+    DANGEROUS_OPERATION("危险操作", "Dangerous Operation"),
+    
+    RUNTIME_ERROR("运行异常", "Runtime Error"),
+    
+    SYSTEM_ERROR("系统错误", "System Error"),
+    
+    WAITING("等待中", "Waitting"),
+    
+    RUNNING("运行中", "Running");
 
     private final String text;
 

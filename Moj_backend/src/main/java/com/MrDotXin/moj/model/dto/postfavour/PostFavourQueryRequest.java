@@ -2,6 +2,8 @@ package com.MrDotXin.moj.model.dto.postfavour;
 
 import com.MrDotXin.moj.common.PageRequest;
 import com.MrDotXin.moj.model.dto.post.PostQueryRequest;
+
+
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

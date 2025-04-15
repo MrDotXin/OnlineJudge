@@ -20,11 +20,14 @@
                         </a-popover>
                     </a-col>
                     <a-col :span="10">
-                        <a-input :style="{width:'320px'}" placeholder="搜索题目, 题号, 标签" allow-clear>
+                        <a-input :style="{width:'320px'}" placeholder="搜索题目" allow-clear>
                             <template #prefix>
                                 <icon-search />
                             </template>
                         </a-input>
+                    </a-col>
+                    <a-col :span="6">
+                        <a-button type="primary">搜索</a-button>
                     </a-col>
                 </a-row>
                 <div v-if="isLoadingData">
@@ -123,8 +126,8 @@
 import { TableColumnData } from '@arco-design/web-vue/es/table';
 import { ref, Ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { QuestionControllerService } from '@/backend'
-import type { QuestionVO } from '@/backend'
+import { QuestionControllerService } from '@/backend/question'
+import type { QuestionVO } from '@/backend/question'
 
 const page = ref({
     current: 1,
@@ -181,14 +184,15 @@ const dataSource: Ref<QuestionVO[]> = ref([]);
 
 const loadData = async () => {
     isLoadingData.value = true;
-    const res = await QuestionControllerService.listQuestionVoByPageUsingPost({
-        pageSize: page.value.pageSize,
-        current: page.value.current
+    QuestionControllerService.listQuestionVoByPageUsingPost({
+        pageSize: String(page.value.pageSize),
+        current: String(page.value.current)
+    }).then((res) => {
+        dataSource.value = res.data.records;
+        pageTotal.value = res.data.total;
+        isLoadingData.value = false;
     });
     
-    dataSource.value = res.data.records;
-    pageTotal.value = res.data.total;
-    isLoadingData.value = false;
 };
 
 // 难度标签颜色映射
@@ -207,7 +211,6 @@ async function onPageChange(current : number) {
 }
 
 const onToProblem = (id : string) => {
-    console.log(id);
     router.push(`/problems/${id}`);
 }
 </script>

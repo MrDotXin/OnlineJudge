@@ -51,7 +51,7 @@ create table if not exists question_submit
     id         bigint auto_increment comment 'id' primary key,
     language       varchar(128)                       not null comment '编程语言',
     code           text                               not null comment '用户代码',
-    status         INT    default 0                   not null comment '判题状态待判题0, 判题中1, 成功2, 失败3',
+    status         VARCHAR(64) default 'watting'      not null comment '执行结果',
     questionId     bigint                             not null comment '题目 id',
     judgeInfo      TEXT                                   null comment '判题信息(json)',          
     userId         bigint                             not null comment '创建用户 id',
@@ -73,3 +73,7 @@ create table if not exists post_favour
     index idx_postId (postId),
     index idx_userId (userId)
 ) comment '帖子收藏';
+
+
+ALTER TABLE question_submit
+CHANGE COLUMN status status VARCHAR(64) DEFAULT 'watting' NOT NULL COMMENT '执行结果';

@@ -15,9 +15,7 @@ const router = useRouter();
 const userStore = UserStore();
 
 async function onUserLogin(account: string, password: string) {
-    console.log("onUserLogin Called");
     const response = await userStore.userLogin({ userAccount: account, userPassword: password });
-    console.log(response);
     if (response?.code === 0) {
         Message.success({ content: '登录成功! 欢迎', duration: 500 });
 

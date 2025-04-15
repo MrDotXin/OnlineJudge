@@ -1,6 +1,6 @@
 package com.MrDotXin.moj.model.entity;
 
-import java.sql.Date;
+import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -13,10 +13,11 @@ import lombok.Data;
 @Data
 public class QuestionSubmit {
     
-    @TableId(type = IdType.ASSIGN_ID)
     /**
      * id
      */
+    @TableId(type = IdType.ASSIGN_ID)
+
     private Long id;
 
     /**
@@ -32,7 +33,7 @@ public class QuestionSubmit {
     /**
      * 判题状态
      */
-    private Integer status;
+    private String status;
 
     /**
      * 题目id
@@ -57,7 +58,7 @@ public class QuestionSubmit {
     /**
      * 更新时间
      */
-     private Date updateTime;
+    private Date updateTime;
 
     private Integer isDelete;
 

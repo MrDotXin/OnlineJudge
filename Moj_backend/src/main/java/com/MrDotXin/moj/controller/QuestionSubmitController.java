@@ -4,6 +4,7 @@ import com.MrDotXin.moj.common.BaseResponse;
 import com.MrDotXin.moj.common.ErrorCode;
 import com.MrDotXin.moj.common.ResultUtils;
 import com.MrDotXin.moj.exception.BusinessException;
+import com.MrDotXin.moj.judge.JudgeService;
 import com.MrDotXin.moj.model.dto.questionsubmit.QuestionSubmitAddRequest;
 import com.MrDotXin.moj.model.dto.questionsubmit.QuestionSubmitQueryRequest;
 import com.MrDotXin.moj.model.entity.QuestionSubmit;
@@ -36,6 +37,8 @@ public class QuestionSubmitController {
     @Resource
     private UserService userService;
 
+    @Resource
+    private JudgeService judgeService;
     /**
      * 提交 / 取消提交题目
      *
@@ -44,7 +47,7 @@ public class QuestionSubmitController {
      * @return resultNum 本次提交变化数
      */
     @PostMapping("/")
-    public BaseResponse<Long> doQuestionSubmit(@RequestBody QuestionSubmitAddRequest questionSubmitAddRequest,
+    public BaseResponse<QuestionSubmitVO> doQuestionSubmit(@RequestBody QuestionSubmitAddRequest questionSubmitAddRequest,
             HttpServletRequest request) {
         if (questionSubmitAddRequest == null || questionSubmitAddRequest.getQuestionId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -53,7 +56,10 @@ public class QuestionSubmitController {
         final User loginUser = userService.getLoginUser(request);
         // 提交到数据库中
         long result = questionSubmitService.doQuestionSubmit(questionSubmitAddRequest, loginUser);
-        return ResultUtils.success(result);
+
+        QuestionSubmitVO vo = judgeService.doJudge(result);
+
+        return ResultUtils.success(vo);
     }
 
     /**
@@ -74,4 +80,5 @@ public class QuestionSubmitController {
 
         return ResultUtils.success(questionSubmitService.getQuestionSubmitVOPage(questionSubmitPage, request));
     }
+
 }

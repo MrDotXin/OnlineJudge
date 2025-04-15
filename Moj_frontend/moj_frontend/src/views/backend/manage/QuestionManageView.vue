@@ -66,7 +66,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 import ColorTable from '@/config/ProblemTagsColorTable'
-import { QuestionControllerService, Question } from '@/backend'
+import { QuestionControllerService, Question } from '@/backend/question'
 
 import { Message } from '@arco-design/web-vue'
 
@@ -86,10 +86,9 @@ const dataSource = ref<Question[]>([]);
 const loadData = async () => {
     isLoadingData.value = true;
     const res = await QuestionControllerService.listQuestionByPageUsingPost({
-        pageSize: page.value.pageSize,
-        current: page.value.current
+        pageSize: String(page.value.pageSize),
+        current: String(page.value.current)
     });
-    console.log(res);
     dataSource.value = res.data.records;
     pageTotal.value = res.data.total;
     page.value.total = res.data.total;
@@ -147,17 +146,15 @@ async function onPageChange(current : number) {
 }
 
 const onToProblem = (id : string) => {
-    console.log(id);
     router.push(`/problems/${id}`);
 }
 
 const getTagColor = (item : string) => {
-    console.log(item);
     return ColorTable[item as keyof typeof ColorTable];
 }
 
 const onDeleteQuestion = async (id : number) => {
-    const res = await QuestionControllerService.deleteQuestionUsingPost({id : id});
+    const res = await QuestionControllerService.deleteQuestionUsingPost({id : String(id)});
     if (res.code === 0) {
         await loadData();
 

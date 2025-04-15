@@ -34,6 +34,11 @@ public class Knife4jConfig {
                 // 指定 Controller 扫描包路径
                 .apis(RequestHandlerSelectors.basePackage("com.MrDotXin.moj.controller"))
                 .paths(PathSelectors.any())
-                .build();
+                .build()
+
+                // JS Number 存在精度丢失问题
+                .directModelSubstitute(Long.class, String.class)
+                .directModelSubstitute(long.class, String.class);
+
     }
 }

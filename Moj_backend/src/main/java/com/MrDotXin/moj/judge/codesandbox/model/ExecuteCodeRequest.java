@@ -19,5 +19,12 @@ public class ExecuteCodeRequest {
     private String language;
 
     private List<String> inputList;
-    
+
+    private List<String> answers; 
+
+    private Long memoryLimit;
+
+    private Long timeLimit;
+
+    private Long codeCompilerMemoryLimit;
 }

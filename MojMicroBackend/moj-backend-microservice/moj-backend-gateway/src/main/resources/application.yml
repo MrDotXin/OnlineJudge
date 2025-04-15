@@ -1,0 +1,36 @@
+# ??????
+#
+#
+spring:
+  cloud: # nacos ???????????
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+    gateway:
+      routes:
+        - id: moj-backend-user-service
+          uri: lb://moj-backend-user-service
+          predicates:
+            - Path=/api/user/**
+        - id: moj-backend-question-service
+          uri: lb://moj-backend-question-service
+          predicates:
+            - Path=/api/question/**
+        - id: moj-backend-judge-service
+          uri: lb://moj-backend-judge-service
+          predicates:
+            - Path=/api/judge/**
+  application:
+    name: moj-backend-gateway
+  main:
+    web-application-type: reactive
+server:
+  port: 8114
+
+knife4j:
+  gateway:
+    enabled: true
+    strategy: discover
+    discover:
+      enabled: true
+      version: swagger2

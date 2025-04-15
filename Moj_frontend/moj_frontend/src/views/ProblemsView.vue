@@ -8,32 +8,25 @@
                             <icon-file />题目描述
                         </template>
 
-                        <div class="scroll-container" style="height: 77vh; overflow: auto; width: 32vw;">
-                            <div class="question_title">
-                                <h2>{{ questionData.title }}</h2>
-                            </div>
-                            <MdPreview :id="id" :modelValue="questionData.content"></MdPreview>
-                            <div style="height: 200vh;">
-                            </div>
-                        </div>
+                        <ProblemDescView :quesitons="questionData" />
                     </a-tab-pane>
                     <a-tab-pane key="2">
                         <template #title>
                             <icon-experiment />题解
                         </template>
-                        Content of Tab Panel 2
+                        暂无题解....
                     </a-tab-pane>
                     <a-tab-pane key="3">
                         <template #title>
                             <icon-message />评论区
                         </template>
-                        Content of Tab Panel 2
+                        <ProblemCommentsView :question-id="String(route.params.id)" />
                     </a-tab-pane>
                     <a-tab-pane key="4">
                         <template #title>
                             <icon-history />提交记录
                         </template>
-                        Content of Tab Panel 2
+                        <ProblemSubmissionView ref="submissionView" :question-id="String(route.params.id)" :user-id="String(userStore.loginUser?.id)" />
                     </a-tab-pane>
                 </a-tabs>
             </div>
@@ -63,17 +56,17 @@
                                 </span>
 
                                 <div style="margin-left: 10vw">
-                                    <a-button type="secondary" :disabled="submitState !== 'normal'"
+                                    <a-button type="secondary" :disabled="true"
                                         @click="onSubmittingTest">
 
                                         <span v-if="submitState !== 'testing'"><icon-play-arrow /> 运行</span>
                                         <span v-else><icon-loading /> 运行中...</span>
                                     </a-button>
                                     <a-divider direction="vertical" />
-                                    <a-button type="primary" status="success" :disabled="submitState !== 'normal'"
+                                    <a-button type="primary" status="success" :disabled="!submitEnabled()"
                                         @click="onSubmittingCode">
                                         <span v-if="submitState !== 'submitting'"><icon-upload :size="14" /> 提交</span>
-                                        <span v-else><icon-loading :size="14" /> 提交中...</span>
+                                        <span v-else><icon-loading :size="14" /> 提交运行中...</span>
                                     </a-button>
                                 </div>
                             </a-space>
@@ -86,7 +79,9 @@
                             </a-space>
                         </div>
                         <a-divider :margin="0"></a-divider>
-
+                        <div v-if="!isLoggin()">
+                            <a-alert style="width: 64vw;">你尚未登陆, 无法提交...</a-alert>
+                        </div>
                         <Codemirror v-model:value="code" :options="cmOptions" style="height: 72vh; width: 64vw;" />
                     </a-space>
                 </a-resize-box>
@@ -94,9 +89,9 @@
                         display: flex; 
                         justify-content: space-between; 
                     ">
-                    <a-tabs type="card-gutter">
+                    <a-tabs type="card-gutter" :active-key="currentTerminal" @change="onTerminalChange">
                         <a-tab-pane key="1">
-                            <template #title>
+                            <template #title>   
                                 <icon-check-square size="large" style="color: green;" /> 测试用例
                             </template>
                             <div :style="{
@@ -112,7 +107,7 @@
                                                 <a-space direction="horizontal">
                                                     <span style="color: rgba(0,0,0,1);"
                                                         @mouseenter="onCaseTabHovering(index)"
-                                                        @mouseleave="onCaseTabLeave(index)">
+                                                        @mouseleave="onCaseTabLeave()">
                                                         Case {{ index + 1 }}
                                                         <span v-if="currentCaseTabHovered === index">
                                                             <icon-close-circle-fill class="case-delete-hint"
@@ -132,6 +127,9 @@
                                                     <a-textarea v-model:model-value="item.output" style="width: 55vw"
                                                         auto-size />
                                                 </a-space>
+                                                <a-button type="outline" status="success" @click="onLoadingTestCase(item)">
+                                                    填入测试用例
+                                                </a-button>
                                             </a-space>
                                         </a-tab-pane>
                                     </a-tabs>
@@ -147,24 +145,35 @@
                                     height: current_status ? 0 : 'calc(' + max_height + 'px - ' + resize_box_height + 'px)',
                                     overflow: 'hidden'
                                 }">
-                                <div v-if="submitState !== 'submitting' && submitState !== 'testing'">
+                                <div v-if="['normal', 'success', 'fail'].includes(submitState)">
                                     <a-space direction="vertical" style="margin-left: 1vw;">
                                         <a-space direction="horizontal">
-                                            <a-tag color="green">样例 {{ active_key }} 输入</a-tag>
-                                            <a-textarea v-model:model-value="testCases[active_key].input"
+                                            <a-tag color="green">样例输入</a-tag>
+                                            <a-textarea v-model:model-value="currentCase.input"
                                                 style="width: 52vw" auto-size />
                                         </a-space>
                                         <a-space direction="horizontal" style="margin-top: 2vh;">
-                                            <a-tag color="gold">样例 {{ active_key }} 输出</a-tag>
-                                            <a-textarea v-model:model-value="testCases[active_key].output"
+                                            <a-tag color="gold">样例输出</a-tag>
+                                            <a-textarea v-model:model-value="currentCase.output"
                                                 style="width: 52vw" auto-size />
                                         </a-space>
                                         <a-divider><icon-check-circle :size="18" /></a-divider>
-                                        <a-space direction="horizontal" style="margin-top: 2vh;">
-                                            <a-tag color="blue">实际输出</a-tag>
-                                            <a-textarea v-model:model-value="current_answer" style="width: 52vw"
-                                                auto-size />
-                                        </a-space>
+                                        <div v-if="submitState==='normal'">
+                                            <a-space direction="horizontal" style="margin-top: 2vh;">
+                                                <a-tag color="blue">实际输出</a-tag>
+                                                <a-textarea v-model:model-value="current_answer" style="width: 52vw"
+                                                    auto-size />
+                                            </a-space>
+                                        </div>
+                                        <div v-else>
+                                            <div v-if="submitState === 'success'">
+                                                <h2 style="color: green">通过!  Accepted</h2>
+                                            </div>
+                                            <div v-else>
+                                                <h2 style="color: red">运行出错! /> {{ last_judge_message }}</h2>
+                                                <span style="color: red">{{last_judge_outcome}}</span>
+                                            </div>
+                                        </div>
                                     </a-space>
                                 </div>
                                 <div v-else>
@@ -177,7 +186,7 @@
                                         </a-space>
                                     </a-skeleton>
                                     <a-space direction="horizontal" style="position: relative; top: -10vh; left: 24vw">
-                                        <span style="color: green"><icon-loading :size="18" /> 提交ing...</span>
+                                        <span style="color: green"><icon-loading :size="18" /> {{stateMessage}}ing...</span>
                                         <SubmitLoader />
                                     </a-space>
                                 </div>
@@ -194,20 +203,20 @@
             </div>
         </a-space>
     </div>
+
 </template>
 
 <script lang="ts" setup>
 import { useRoute } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import type { Ref } from 'vue'
+import { UserStore } from '../store/user'// backend 
 
-// backend 
-import { QuestionControllerService } from '@/backend'
-import type { QuestionVO, JudgeCase } from '@/backend'
 
-// Mark down editor 
-import { MdPreview } from 'md-editor-v3';
-import 'md-editor-v3/lib/preview.css';
+// 后端
+import { QuestionSubmitControllerService } from '@/backend/question'
+import { QuestionControllerService } from '@/backend/question'
+import type { QuestionVO, JudgeCase } from '@/backend/question'
 
 
 // code editor
@@ -220,9 +229,25 @@ import 'codemirror/keymap/sublime.js'
 
 import SubmitLoader from '@/components/Loader/TallFish.vue'
 
+
+// 先载入用户数据
+const userStore = UserStore();
+
+// 其它组件
+    // 题目评论
+import ProblemCommentsView from '@/views/ProblemCommentsView.vue'
+
+import ProblemDescView from '@/views/ProblemDescView.vue'
+
+import ProblemSubmissionView from '@/views/ProblemSubmissionView.vue'
+
+import JudgeInfoEnum from '@/enums/JudgeInfoEnum'
+
+const submissionView = ref<{ reloadData: () => void } | null>(null);
+
 const code = ref("for(int i = 0; i < n; i ++) {\n\n    i++; \n}");
 
-const currentLang = ref("C++");
+const currentLang = ref("Java 1.8");
 const cmOptions = {
     mode: "text/x-c++src", // Language mode
 
@@ -240,9 +265,10 @@ const cmOptions = {
 
 const route = useRoute();
 const questionData: Ref<QuestionVO> = ref({});
-const id = 'preview-only';
 
-// test-like
+/**
+ * 输出输入用例相关
+ */
 const testCases = ref<JudgeCase[]>([
     {
         input: "1",
@@ -254,16 +280,45 @@ const testCases = ref<JudgeCase[]>([
     },
 ]);
 
+const currentCase = ref<JudgeCase>(
+    {
+        input: "1",
+        output: "2"
+    }
+)
+
+const currentTerminal = ref("1");
+const onTerminalChange = (newKey : string | number) => {
+    currentTerminal.value = newKey as string;
+}
+
+const onLoadingTestCase = (item : JudgeCase) => {
+    currentCase.value.input = item.input;
+    currentCase.value.output = item.output;
+    currentTerminal.value = "2";
+}
+
+// 当前输出用例
 const current_answer = ref("");
 
 const active_key = ref(0);
 
-const submitState = ref<"normal" | "submitting" | "testing" | "success" | "failure">("normal");
+// 判题状态
+const submitState = ref<"normal" | "submitting" | "testing" | "success" | "fail" | "watting">("normal");
+
+// 判题信息
+const stateMessage = ref<string>("");
+
+// 消息。
+const last_judge_message = ref("");
+
+// 详细信息。
+const last_judge_outcome = ref("");
 
 const onDeleteCases = (index: number) => {
     if (testCases.value.length > 1) {
         testCases.value.splice(index, 1);
-        if (active_key.value === index) {
+        if (active_key.value === index) { 
             active_key.value -= 1;
         }
     }
@@ -273,25 +328,70 @@ const onAddingCases = () => {
     testCases.value.push(testCases.value[testCases.value.length - 1]);
 };
 
+// 悬浮在测试用例上的删除按钮逻辑
 const currentCaseTabHovered = ref(-1);
 
 const onCaseTabHovering = (index: number) => {
-    console.log(index + ' enter');
     currentCaseTabHovered.value = index;
 }
 
-const onCaseTabLeave = (index: number) => {
-    console.log(index + ' leave');
+const onCaseTabLeave = () => {
     currentCaseTabHovered.value = -1;
 }
 
 const onSubmittingTest = () => {
     submitState.value = "testing";
-
 }
 
-const onSubmittingCode = () => {
+// 提交判题
+
+let waittingJudgeInterval = 0;
+
+const submitEnabled = () => {
+    return submitState.value !== 'submitting' && userStore.isLoggedIn; 
+}
+
+const isLoggin = () => {
+    return !!userStore.isLoggedIn;
+}
+
+const onSubmittingCode = async () => {
     submitState.value = "submitting";
+    stateMessage.value = "提交中";
+
+    currentTerminal.value = "2";
+    stretchTo(0);
+
+    let response = await QuestionSubmitControllerService.doQuestionSubmitUsingPost({
+        code: code.value,
+        language: currentLang.value,
+        questionId: route.params.id as string
+    });
+
+    submissionView.value?.reloadData();
+
+    let submissionId = response.data;
+    
+    waittingJudgeInterval = setInterval(async () => {
+        
+        let response = await QuestionSubmitControllerService.getQuestionSubmitByIdUsingGet1(
+            submissionId
+        );
+
+        let status = response.data?.status; 
+        if (status !== JudgeInfoEnum.WAITING) {
+            if (status === JudgeInfoEnum.RUNNING) {
+                stateMessage.value = '运行中';
+            } else {
+                submitState.value = ((status === JudgeInfoEnum.ACCEPTED) ? 'success' : 'fail');
+
+                last_judge_message.value = status || '';
+                last_judge_outcome.value = response.data?.judgeInfo?.message || '';
+                clearInterval(waittingJudgeInterval);
+            }
+        }
+    }, 500);
+    
 }
 
 // 伸缩框
@@ -311,7 +411,6 @@ const onResizeBoxMoving = () => {
 }
 
 const onStretch = () => {
-    console.log(1);
     if (current_status.value === 1) {
         resize_box_height.value = max_height / 2;
         current_status.value = 0;
@@ -321,12 +420,20 @@ const onStretch = () => {
     }
 }
 
+const stretchTo = (toward : number) => {
+    current_status.value = toward;
+    if (toward === 0) {
+        resize_box_height.value = max_height / 2;
+    } else {
+        resize_box_height.value = max_height;
+    }
+}
+
 const loadData = async () => {
-    const id = Number(route.params.id);
-    const response = await QuestionControllerService.getQuestionVoByIdUsingGet(id);
+    const id = route.params.id;
+    const response = await QuestionControllerService.getQuestionVoByIdUsingGet(id as string);
 
     if (response.code === 0) {
-        console.log(response);
         questionData.value = response.data as QuestionVO;
     }
 }
@@ -346,9 +453,12 @@ onMounted(async () => {
 
 
 <style scoped>
-.question_title {
-    margin-left: 2vw;
+
+:deep(#preview-only) {
+    zoom: 0.7
 }
+
+
 
 .all {
     background-color: rgba(242, 240, 240, 0.57);
@@ -392,27 +502,6 @@ onMounted(async () => {
     }
 }
 
-#preview-only {
-    margin-left: 2vw;
-}
-
-.scroll-container {
-    height: 70vh;
-    overflow: auto;
-    /* 美化滚动条 */
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-neutral-3) transparent;
-}
-
-/* 滚动条样式（可选） */
-.scroll-container::-webkit-scrollbar {
-    width: 6px;
-}
-
-.scroll-container::-webkit-scrollbar-thumb {
-    background: var(--color-neutral-3);
-    border-radius: 3px;
-}
 
 .contest_status {
     margin-top: 3.5px;

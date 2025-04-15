@@ -1,7 +1,7 @@
 package com.MrDotXin.moj.model.vo;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import org.springframework.beans.BeanUtils;
 
@@ -37,7 +37,7 @@ public class QuestionSubmitVO implements Serializable {
     /**
      * 判题状态
      */
-    private Integer status;
+    private String status;
     
     /**
      * 创建用户ID
