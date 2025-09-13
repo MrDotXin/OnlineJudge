@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 
  */
 @RestController
-@RequestMapping("/question_submit")
+@RequestMapping("/question/question_submit")
 public class QuestionSubmitController {
 
     @Resource

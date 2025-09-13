@@ -26,7 +26,8 @@
                         <template #title>
                             <icon-history />提交记录
                         </template>
-                        <ProblemSubmissionView ref="submissionView" :question-id="String(route.params.id)" :user-id="String(userStore.loginUser?.id)" />
+                        <ProblemSubmissionView ref="submissionView" :question-id="String(route.params.id)"
+                            :user-id="String(userStore.loginUser?.id)" />
                     </a-tab-pane>
                 </a-tabs>
             </div>
@@ -37,9 +38,9 @@
                     v-model:height="resize_box_height" @moving="onResizeBoxMoving">
                     <template #resize-trigger>
                         <div :class="[
-                                    `resizebox-demo`,
-                                    `resizebox-demo-horizontal`
-                                ]">
+                            `resizebox-demo`,
+                            `resizebox-demo-horizontal`
+                        ]">
                             <div class="resizebox-demo-line" />
                         </div>
                     </template>
@@ -56,8 +57,7 @@
                                 </span>
 
                                 <div style="margin-left: 10vw">
-                                    <a-button type="secondary" :disabled="true"
-                                        @click="onSubmittingTest">
+                                    <a-button type="secondary" :disabled="true" @click="onSubmittingTest">
 
                                         <span v-if="submitState !== 'testing'"><icon-play-arrow /> 运行</span>
                                         <span v-else><icon-loading /> 运行中...</span>
@@ -91,14 +91,14 @@
                     ">
                     <a-tabs type="card-gutter" :active-key="currentTerminal" @change="onTerminalChange">
                         <a-tab-pane key="1">
-                            <template #title>   
+                            <template #title>
                                 <icon-check-square size="large" style="color: green;" /> 测试用例
                             </template>
                             <div :style="{
-                                    width: '64vw',
-                                    height: current_status ? 0 : 'calc(' + max_height + 'px - ' + resize_box_height + 'px)',
-                                    overflow: 'hidden'
-                                }">
+                                width: '64vw',
+                                height: current_status ? 0 : 'calc(' + max_height + 'px - ' + resize_box_height + 'px)',
+                                overflow: 'hidden'
+                            }">
                                 <a-space direction="horizontal" align="start">
                                     <a-tabs type="line" :editable="true" show-add-button auto-switch animation
                                         @add="onAddingCases" v-model:active-key="active_key">
@@ -127,7 +127,8 @@
                                                     <a-textarea v-model:model-value="item.output" style="width: 55vw"
                                                         auto-size />
                                                 </a-space>
-                                                <a-button type="outline" status="success" @click="onLoadingTestCase(item)">
+                                                <a-button type="outline" status="success"
+                                                    @click="onLoadingTestCase(item)">
                                                     填入测试用例
                                                 </a-button>
                                             </a-space>
@@ -141,24 +142,24 @@
                                 <icon-code-block size="large" style="color: green;" /> 测试结果
                             </template>
                             <div :style="{
-                                    width: '80vw',
-                                    height: current_status ? 0 : 'calc(' + max_height + 'px - ' + resize_box_height + 'px)',
-                                    overflow: 'hidden'
-                                }">
+                                width: '80vw',
+                                height: current_status ? 0 : 'calc(' + max_height + 'px - ' + resize_box_height + 'px)',
+                                overflow: 'hidden'
+                            }">
                                 <div v-if="['normal', 'success', 'fail'].includes(submitState)">
                                     <a-space direction="vertical" style="margin-left: 1vw;">
                                         <a-space direction="horizontal">
                                             <a-tag color="green">样例输入</a-tag>
-                                            <a-textarea v-model:model-value="currentCase.input"
-                                                style="width: 52vw" auto-size />
+                                            <a-textarea v-model:model-value="currentCase.input" style="width: 52vw"
+                                                auto-size />
                                         </a-space>
                                         <a-space direction="horizontal" style="margin-top: 2vh;">
                                             <a-tag color="gold">样例输出</a-tag>
-                                            <a-textarea v-model:model-value="currentCase.output"
-                                                style="width: 52vw" auto-size />
+                                            <a-textarea v-model:model-value="currentCase.output" style="width: 52vw"
+                                                auto-size />
                                         </a-space>
                                         <a-divider><icon-check-circle :size="18" /></a-divider>
-                                        <div v-if="submitState==='normal'">
+                                        <div v-if="submitState === 'normal'">
                                             <a-space direction="horizontal" style="margin-top: 2vh;">
                                                 <a-tag color="blue">实际输出</a-tag>
                                                 <a-textarea v-model:model-value="current_answer" style="width: 52vw"
@@ -167,11 +168,11 @@
                                         </div>
                                         <div v-else>
                                             <div v-if="submitState === 'success'">
-                                                <h2 style="color: green">通过!  Accepted</h2>
+                                                <h2 style="color: green">通过! Accepted</h2>
                                             </div>
                                             <div v-else>
                                                 <h2 style="color: red">运行出错! /> {{ last_judge_message }}</h2>
-                                                <span style="color: red">{{last_judge_outcome}}</span>
+                                                <span style="color: red">{{ last_judge_outcome }}</span>
                                             </div>
                                         </div>
                                     </a-space>
@@ -186,7 +187,8 @@
                                         </a-space>
                                     </a-skeleton>
                                     <a-space direction="horizontal" style="position: relative; top: -10vh; left: 24vw">
-                                        <span style="color: green"><icon-loading :size="18" /> {{stateMessage}}ing...</span>
+                                        <span style="color: green"><icon-loading :size="18" />
+                                            {{ stateMessage }}ing...</span>
                                         <SubmitLoader />
                                     </a-space>
                                 </div>
@@ -234,7 +236,7 @@ import SubmitLoader from '@/components/Loader/TallFish.vue'
 const userStore = UserStore();
 
 // 其它组件
-    // 题目评论
+// 题目评论
 import ProblemCommentsView from '@/views/ProblemCommentsView.vue'
 
 import ProblemDescView from '@/views/ProblemDescView.vue'
@@ -288,11 +290,11 @@ const currentCase = ref<JudgeCase>(
 )
 
 const currentTerminal = ref("1");
-const onTerminalChange = (newKey : string | number) => {
+const onTerminalChange = (newKey: string | number) => {
     currentTerminal.value = newKey as string;
 }
 
-const onLoadingTestCase = (item : JudgeCase) => {
+const onLoadingTestCase = (item: JudgeCase) => {
     currentCase.value.input = item.input;
     currentCase.value.output = item.output;
     currentTerminal.value = "2";
@@ -318,7 +320,7 @@ const last_judge_outcome = ref("");
 const onDeleteCases = (index: number) => {
     if (testCases.value.length > 1) {
         testCases.value.splice(index, 1);
-        if (active_key.value === index) { 
+        if (active_key.value === index) {
             active_key.value -= 1;
         }
     }
@@ -348,7 +350,7 @@ const onSubmittingTest = () => {
 let waittingJudgeInterval = 0;
 
 const submitEnabled = () => {
-    return submitState.value !== 'submitting' && userStore.isLoggedIn; 
+    return submitState.value !== 'submitting' && userStore.isLoggedIn;
 }
 
 const isLoggin = () => {
@@ -371,14 +373,14 @@ const onSubmittingCode = async () => {
     submissionView.value?.reloadData();
 
     let submissionId = response.data;
-    
+
     waittingJudgeInterval = setInterval(async () => {
-        
+
         let response = await QuestionSubmitControllerService.getQuestionSubmitByIdUsingGet1(
             submissionId
         );
 
-        let status = response.data?.status; 
+        let status = response.data?.status;
         if (status !== JudgeInfoEnum.WAITING) {
             if (status === JudgeInfoEnum.RUNNING) {
                 stateMessage.value = '运行中';
@@ -391,7 +393,7 @@ const onSubmittingCode = async () => {
             }
         }
     }, 500);
-    
+
 }
 
 // 伸缩框
@@ -420,7 +422,7 @@ const onStretch = () => {
     }
 }
 
-const stretchTo = (toward : number) => {
+const stretchTo = (toward: number) => {
     current_status.value = toward;
     if (toward === 0) {
         resize_box_height.value = max_height / 2;
@@ -432,7 +434,7 @@ const stretchTo = (toward : number) => {
 const loadData = async () => {
     const id = route.params.id;
     const response = await QuestionControllerService.getQuestionVoByIdUsingGet(id as string);
-
+    console.log(response);
     if (response.code === 0) {
         questionData.value = response.data as QuestionVO;
     }
@@ -453,7 +455,6 @@ onMounted(async () => {
 
 
 <style scoped>
-
 :deep(#preview-only) {
     zoom: 0.7
 }

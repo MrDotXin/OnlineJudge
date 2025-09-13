@@ -61,7 +61,7 @@ Docker 负责运行java程序，同时得到结果
 拉取镜像
 
 ```java
-docker pull openjdk:8-ipline
+docker pull openjdk:8-alpine
 ```
 
 
@@ -353,17 +353,7 @@ public class GlobalRequestFilter implements GlobalFilter {
 }
 ```
 
-示例:
-
-<img src="C:\Users\MrXin\AppData\Roaming\Typora\typora-user-images\image-20250331162607611.png" alt="image-20250331162607611" style="zoom:25%;" />
 
 
 
-## 基于RabbitMQ的判题服务解耦
-
-我们通过引入rabbitmq 来解耦判题服务和题目提交服务
-
-```
-
-```
 
